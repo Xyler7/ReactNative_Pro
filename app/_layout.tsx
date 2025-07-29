@@ -14,13 +14,14 @@ function RouteGuard({children}: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-export default function RootLayout() {
+export default function Root() {
     return (
-      <RouteGuard>
+    <RouteGuard>
         <Stack> 
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="auth" options={{ headerShown: true }} />
         </Stack>
-      </RouteGuard>
+    </RouteGuard>
     );
 }
 
