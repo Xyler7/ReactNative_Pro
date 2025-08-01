@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/lib/auth-context";
 import { Stack, useRouter } from "expo-router";
 import { useEffect } from "react";
 
@@ -16,12 +17,13 @@ function RouteGuard({children}: { children: React.ReactNode }) {
 
 export default function Root() {
     return (
-    <RouteGuard>
-        <Stack> 
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="auth" options={{ headerShown: true }} />
-        </Stack>
-    </RouteGuard>
+      <AuthProvider>
+        <RouteGuard>
+            <Stack> 
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+        </RouteGuard>
+    </AuthProvider>
     );
 }
 
