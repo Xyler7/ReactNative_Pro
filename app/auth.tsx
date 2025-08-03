@@ -23,7 +23,7 @@ export default function AuthScreen() {
         if (password.length < 6) {
             setError("Password must be at least 6 characters long.");
             return;
-        }
+        }   
         setError(null);
         if (email.indexOf("@") === -1) {
             setError("Please enter a valid email address.");
@@ -76,9 +76,9 @@ export default function AuthScreen() {
             <TextInput
                 label= "Password"
                 autoCapitalize="none" 
-                keyboardType="email-address"
-                placeholder="Enter your password"
+                secureTextEntry={true}
                 mode="outlined"
+                style={styles.input}
                 onChangeText={setPassword}
             />
 

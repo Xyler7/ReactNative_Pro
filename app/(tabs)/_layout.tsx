@@ -2,6 +2,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { Tabs } from "expo-router";
 
+
 export default function TabsLayout() {
     return (
       <Tabs screenOptions={{tabBarActiveTintColor: "coral"}}> 
@@ -17,7 +18,18 @@ export default function TabsLayout() {
                 }
             }
         } />
-        <Tabs.Screen name="login" options={{ title: "Login" }} />
+        <Tabs.Screen name="login" options={
+            {
+                title: "Login",
+                tabBarIcon: ({ color, focused }) => {
+                    return focused ? (
+                        <AntDesign name="profile" size={24} color={color} />
+                    ) : (
+                        <AntDesign name="profile" size={24} color="gray" />
+                    )
+                }
+            }
+        } />
 
       </Tabs>
     );
