@@ -102,3 +102,7 @@ const styles = StyleSheet.create({
 
 });
 
+function fetchHabits() {
+    throw new Error("Function not implemented.");
+}
+
