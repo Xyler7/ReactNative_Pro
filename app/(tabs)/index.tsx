@@ -39,7 +39,7 @@ export default function Index() {
         <Text variant="headlineSmall" style={styles.title}> Today&apos;s Habits</Text>
         <Button
           mode="text"
-          onPress={fetchHabits}
+          onPress={signOut}
           icon={"logout"}
           >Sign Out
         </Button>
