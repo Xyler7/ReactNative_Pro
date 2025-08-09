@@ -3,8 +3,8 @@ import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { ID } from "react-native-appwrite";
-import { Button, SegmentedButtons, Text, TextInput, useTheme } from "react-native-paper";
+import { ID, Permission, Role } from "react-native-appwrite";
+import { Button, SegmentedButtons, TextInput, useTheme } from "react-native-paper";
 
 
 const FREQUENCIES = ["daily", "weekly", "monthly"];
@@ -35,17 +35,20 @@ export default function AddHabitScreen() {
                 streak_count: 0,
                 last_completed: new Date().toISOString(),
                 created_at: new Date().toISOString(),
-            }
+            },
+            [
+                Permission.read(Role.user(user.$id)),
+                Permission.write(Role.user(user.$id)),
+            ]
         );
 
-        router.back()
+            router.replace("/");
         } catch (error) {
             if(error instanceof Error) {
-                setError(error.message);
-                return;
+            setError(error.message);
+            return;
             }
         }
-
         setError("An error occurred while adding the habit. Please try again later.");
     };
 
@@ -74,12 +77,10 @@ export default function AddHabitScreen() {
                 />
             </View>
             <Button
-            mode="contained" 
-            onPress={handleSubmit}
-            disabled={!title || !description}>Add Habit
-            </Button> 
-            {error && <Text style={{ color: theme.colors.error }}>{error}</Text>}
-             
+                mode="contained" 
+                onPress={handleSubmit}
+                disabled={!title || !description}>Add Habit
+            </Button>              
         </View>
     );
 }
