@@ -1,50 +1,36 @@
-# Welcome to your Expo app 👋
+📘 Project Description
+Habit Tracker is a mobile application built with Expo and React Native that helps users build and maintain healthy habits. Whether you're aiming to exercise daily, drink more water, or read regularly, this app provides a simple and intuitive interface to track your progress and stay motivated.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+📖 README.md (English)
 
-## Get started
+# 🧠 Habit Tracker
 
-1. Install dependencies
+Habit Tracker is a mobile app developed using [Expo](https://expo.dev) and React Native. It allows users to monitor their daily habits, set goals, and visualize progress over time. The project is structured with file-based routing for easy scalability and customization.
 
-   ```bash
-   npm install
-   ```
+## 🚀 Getting Started
 
-2. Start the app
+Follow these steps to run the project locally:
 
-   ```bash
-   npx expo start
-   ```
+### 1. Install Dependencies
+```bash```
+npm install
+``````   ``````
+2. Start the App
 
-In the output, you'll find options to open the app in a
+You can run the app using:
+• 	Expo Go
+• 	Android Emulator
+• 	iOS Simulator
+• 	Development Build
+🛠 Development
+Start editing files inside the  directory. The project uses file-based routing for navigation.
+To reset the project and start fresh:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This will move the starter code to the  directory and create a blank  directory.
+📚 Learn More
+• 	Expo Documentation
+• 	Expo Guides
+• 	Learn Expo Tutorial
+💬 Community
+• 	Expo GitHub
+• 	Expo Discord
