@@ -1,5 +1,3 @@
-📖 README.md (English)
-
 # 🧠 Habit Tracker
 
 Habit Tracker is a mobile app developed using [Expo](https://expo.dev) and React Native. It allows users to monitor their daily habits, set goals, and visualize progress over time. The project is structured with file-based routing for easy scalability and customization.
