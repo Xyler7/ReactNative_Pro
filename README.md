@@ -18,8 +18,7 @@ To run the project locally:
 npm install
 
 ### 2. Start the development server
-```bash```
-npx expo start
+```bash npx expo start ```
 
 
 You can open the app using:
@@ -28,19 +27,19 @@ You can open the app using:
 - iOS Simulator
 - Development Build
   
-🛠 Project Structure
+## 🛠 Project Structure
 This project uses file-based routing inside the app directory. You can start editing screens and components directly from there.
 To reset the project and start fresh:
-npm run reset-project
+ ```bash npm run reset-project ```
 
 
 This command moves the starter code to the app-example folder and creates a blank app directory.
-📚 Resources
+## 📚 Resources
 - Expo Documentation
 - React Native Docs
 - Expo Router Guide
 - Learn Expo Tutorial
-🤝 Contributing
+## 🤝 Contributing
 Feel free to fork the repository, open issues, or submit pull requests to improve the app or add new features.
-📄 License
+## 📄 License
 This project is open-source and available under the MIT License.
