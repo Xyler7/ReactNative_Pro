@@ -17,7 +17,7 @@ To run the project locally:
 ```bash```
 npm install
 
-2. Start the development server
+### 2. Start the development server
 ```bash```
 npx expo start
 
