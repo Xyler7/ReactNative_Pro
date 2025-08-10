@@ -1,6 +1,3 @@
-📘 Project Description
-Habit Tracker is a mobile application built with Expo and React Native that helps users build and maintain healthy habits. Whether you're aiming to exercise daily, drink more water, or read regularly, this app provides a simple and intuitive interface to track your progress and stay motivated.
-
 📖 README.md (English)
 
 # 🧠 Habit Tracker
