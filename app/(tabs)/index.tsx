@@ -1,6 +1,6 @@
 import { client, COMPLETIONS_COLLECTION_ID, DATABASE_ID, databases, HABITS_COLLECTION_ID, RealtimeResponse } from "@/lib/appwrite";
 import { useAuth } from "@/lib/auth-context";
-import { Habit, HabitCompletion } from "@/types/database.type";
+import { Habit, habitCompletions } from "@/types/database.type";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -81,7 +81,7 @@ export default function Index() {
           Query.equal("user_id", user?.$id ?? ""),
           Query.greaterThanEqual("completed_at", today.toISOString())]
       );
-      const completions = response.documents as HabitCompletion[];
+      const completions = response.documents as habitCompletions[];
       setCompletedHabits(completions.map((c) => c.habit_id));
     } catch (error) {
       console.error("Error fetching habits:", error);
@@ -137,8 +137,8 @@ export default function Index() {
       }
     };
 
-    const isHabitCompleted = (habitID: string) =>
-      completedHabits?.includes(habitID);
+  const isHabitCompleted = (habitID: string) =>
+    completedHabits?.includes(habitID);
 
   const renderRightActions = (habitId: string) =>(
     <View style={styles.swipeActionRight}>
@@ -185,7 +185,10 @@ export default function Index() {
     <ScrollView showsVerticalScrollIndicator={false}>
       {habits?.length === 0 ? (
       <View style={styles.emptyState}>
-        <Text style={styles.emptyStateText}>No habits yet. Add your first habit!</Text></View>
+        <Text style={styles.emptyStateText}>
+          No habits yet. Add your first habit!
+        </Text>
+      </View>
       ) : (
         habits?.map((habit, key) => (
           <Swipeable ref={(ref) => {
