@@ -7,7 +7,7 @@ type AuthContextType = {
     user: Models.User<Models.Preferences> | null;
     isLoadingUser: boolean;
     signUp: (email: string, password: string) => Promise<string | null>;
-    signIn: (email: string, password: string) => Promise<string | null>;
+    signIn: (email: string, password: string) => Promise<string | Models.User<Models.Preferences> | null>;
     signOut: () => Promise<void>;
 };
 
@@ -58,11 +58,18 @@ export function AuthProvider({ children } : { children: React.ReactNode }) {
     // Sign in the user
     const signIn = async (email: string, password: string) => {
         try {
-            await account.createEmailPasswordSession(email, password);
-            const session = await account.get();
-            setUser(session);
-            return null; // Return null on success
-        } catch (error) {
+             const current = await account.getSession('current').catch(() => null);
+            if (current) {
+                const user = await account.get();
+                setUser(user);
+                return user;
+                }
+
+                await account.createEmailPasswordSession(email, password);
+                const user = await account.get();
+                setUser(user);
+                return user;
+            } catch (error) {
             if (error instanceof Error) {
                 return error.message; // Return error message on failure
             }

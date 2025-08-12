@@ -15,6 +15,7 @@
       "channel": "preview"
     },
     "production": {
+      "android": {},
       "autoIncrement": true,
       "channel": "production",
       "distribution": "store"

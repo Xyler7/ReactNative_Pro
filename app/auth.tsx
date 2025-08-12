@@ -13,9 +13,9 @@ export default function AuthScreen() {
     const theme = useTheme();
     const router = useRouter();
 
-    const {signIn, signUp} = useAuth();
+    const { signIn, signUp } = useAuth();
 
-    const handleAuth = async() => {
+    const handleAuth = async () => {
         if (!email || !password) {
             setError("Email and password are required.");
             return;
@@ -23,95 +23,93 @@ export default function AuthScreen() {
         if (password.length < 6) {
             setError("Password must be at least 6 characters long.");
             return;
-        }   
-        setError(null);
+        }
         if (email.indexOf("@") === -1) {
             setError("Please enter a valid email address.");
             return;
         }
         setError(null);
-        
-        
-        if(isSignUp) {
-            const error = await signUp(email, password)
-            if (error) {
-                setError(error);
+
+        if (isSignUp) {
+            const result = await signUp(email, password);
+            if (typeof result === "string") {
+                setError(result);
                 return;
             }
         } else {
-            const error = await signIn(email, password);
-            if (error) {
-                setError(error);
+            const result = await signIn(email, password);
+            if (typeof result === "string") {
+                setError(result);
                 return;
             }
-            
+            setError(null); // giriş başarılı, hata yok
             router.replace("/");
         }
-    }
-        
+    };
+
     const handleSwitchMode = () => {
         setIsSignUp((prev) => !prev);
-    }
+    };
 
     return (
-    <KeyboardAvoidingView
-    behavior={Platform.OS === "android" ? "padding" : "height"}
-    style={styles.container}
-    >
-        <View style={ styles.content}>
-            <Text style={ styles.title}  variant="headlineSmall">
-                {isSignUp ? "Create Account" : "Welcome Back!"}
-            </Text>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "android" ? "padding" : "height"}
+            style={styles.container}
+        >
+            <View style={styles.content}>
+                <Text style={styles.title} variant="headlineSmall">
+                    {isSignUp ? "Create Account" : "Welcome Back!"}
+                </Text>
 
-            <TextInput
-                label= "Email"
-                autoCapitalize="none" 
-                keyboardType="email-address"
-                placeholder="example@gmail.com"
-                mode="outlined"
-                style={styles.input}
-                onChangeText={setEmail}
-            />
+                <TextInput
+                    label="Email"
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    placeholder="example@gmail.com"
+                    mode="outlined"
+                    style={styles.input}
+                    onChangeText={setEmail}
+                />
 
-            <TextInput
-                label= "Password"
-                autoCapitalize="none" 
-                secureTextEntry={true}
-                mode="outlined"
-                style={styles.input}
-                onChangeText={setPassword}
-            />
+                <TextInput
+                    label="Password"
+                    autoCapitalize="none"
+                    secureTextEntry={true}
+                    mode="outlined"
+                    style={styles.input}
+                    onChangeText={setPassword}
+                />
 
-            {error && 
-            <Text style={{ color: theme.colors.error }}>{error}</Text>}
+                {error && (
+                    <Text style={{ color: theme.colors.error }}>{error}</Text>
+                )}
 
-            <Button
-            mode="contained"
-            style={styles.button}
-            onPress={handleAuth}>
-                {isSignUp
-                ? "Sign Up"
-                : "Sign In"}
-            </Button>
+                <Button
+                    mode="contained"
+                    style={styles.button}
+                    onPress={handleAuth}
+                >
+                    {isSignUp ? "Sign Up" : "Sign In"}
+                </Button>
 
-            <Button
-            mode="text"
-            onPress={handleSwitchMode}
-            style={styles.switchModeButton}>
-                {isSignUp
-                ? "Already have an account? Sign In!"
-                : "Don't have and account? Sign Up!"}
-            </Button>
-
-         </View>
-    </KeyboardAvoidingView>
+                <Button
+                    mode="text"
+                    onPress={handleSwitchMode}
+                    style={styles.switchModeButton}
+                >
+                    {isSignUp
+                        ? "Already have an account? Sign In!"
+                        : "Don't have an account? Sign Up!"}
+                </Button>
+            </View>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:"#f5f5f5"
+        backgroundColor: "#f5f5f5",
     },
     content: {
         flex: 1,
@@ -133,5 +131,5 @@ const styles = StyleSheet.create({
     },
     switchModeButton: {
         marginTop: 6,
-    }
+    },
 });
