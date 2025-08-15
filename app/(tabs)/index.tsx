@@ -2,11 +2,11 @@ import { client, COMPLETIONS_COLLECTION_ID, DATABASE_ID, databases, HABITS_COLLE
 import { useAuth } from "@/lib/auth-context";
 import { Habit, habitCompletions } from "@/types/database.type";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { ID, Query } from "react-native-appwrite";
 import { Swipeable } from "react-native-gesture-handler";
-import { Button, Surface, Text } from "react-native-paper";
+import { Button, Snackbar, Surface, Text } from "react-native-paper";
 
 export default function Index() {
 
@@ -16,7 +16,45 @@ export default function Index() {
   const [habits, setHabits] = useState<Habit[]>();
   const [completedHabits, setCompletedHabits] = useState<string[]>();
 
+  const [deletedHabitBackup, setDeletedHabitBackup] = useState<{
+  habit: Habit;
+  completions: habitCompletions[];
+} | null>(null);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+
   const swipeableRefs = useRef< {[key: string]: Swipeable | null} >({});
+
+  const fetchTodayCompletions = useCallback(async () => {
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const response = await databases.listDocuments(
+        DATABASE_ID,
+        COMPLETIONS_COLLECTION_ID,
+        [
+          Query.equal("user_id", user?.$id ?? ""),
+          Query.greaterThanEqual("completed_at", today.toISOString())]
+      );
+      const completions = response.documents as habitCompletions[];
+      setCompletedHabits(completions.map((c) => c.habit_id));
+    } catch (error) {
+      console.error("Error fetching habits:", error);
+    }
+  }, [user]);
+
+
+  const fetchHabits = useCallback(async () => {
+    try {
+      const response = await databases.listDocuments(
+        DATABASE_ID,
+        HABITS_COLLECTION_ID,
+        [Query.equal("user_id", user?.$id ?? "")]
+      );
+      setHabits(response.documents as Habit[]);
+    } catch (error) {
+      console.error("Error fetching habits:", error);
+    }
+  }, [user]);
 
 
   useEffect(() => {   
@@ -68,47 +106,107 @@ export default function Index() {
       completionsSubscription();
     };
   }
-}, [user]);
+}, [user, fetchHabits, fetchTodayCompletions]);
     
-  const fetchTodayCompletions = async () => {
-    try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const response = await databases.listDocuments(
+
+
+  const handleDeleteHabit = async (habitId: string) => {
+  try {
+    const habit = habits?.find(h => h.$id === habitId);
+    if (!habit) return;
+
+    const completionsRes = await databases.listDocuments(
+      DATABASE_ID,
+      COMPLETIONS_COLLECTION_ID,
+      [Query.equal("habit_id", habitId)]
+    );
+    const completions = completionsRes.documents as habitCompletions[];
+
+    setDeletedHabitBackup({ habit, completions });
+
+    for (const completion of completions) {
+      await databases.deleteDocument(
         DATABASE_ID,
         COMPLETIONS_COLLECTION_ID,
-        [
-          Query.equal("user_id", user?.$id ?? ""),
-          Query.greaterThanEqual("completed_at", today.toISOString())]
+        completion.$id
       );
-      const completions = response.documents as habitCompletions[];
-      setCompletedHabits(completions.map((c) => c.habit_id));
-    } catch (error) {
-      console.error("Error fetching habits:", error);
     }
-  };
 
+    await databases.deleteDocument(DATABASE_ID, HABITS_COLLECTION_ID, habitId);
 
-  const fetchHabits = async () => {
-    try {
-      const response = await databases.listDocuments(
+    fetchHabits();
+    fetchTodayCompletions();
+
+    setSnackbarVisible(true);
+  } catch (error) {
+    console.error("❌ Error deleting habit and completions:", error);
+  }
+};
+
+  const handleUndoDelete = async () => {
+  if (!deletedHabitBackup || !user) return;
+
+  try {
+    const { habit, completions } = deletedHabitBackup;
+
+    const cleanDocument = (doc: any) => {
+      const {
+        $id,
+        $collectionId,
+        $databaseId,
+        $createdAt,
+        $updatedAt,
+        $permissions,
+        $sequence,
+        ...rest
+      } = doc;
+      return rest;
+    };
+
+    // Alışkanlığı geri ekle
+    const newHabitId = ID.unique();
+    await databases.createDocument(
+      DATABASE_ID,
+      HABITS_COLLECTION_ID,
+      newHabitId,
+      {
+        ...cleanDocument(habit),
+        user_id: user.$id,
+      }
+    );
+
+    // Bugünün tarihi (YYYY-MM-DD formatında)
+    const today = new Date().toISOString().split("T")[0];
+
+    // Sadece bugünkü completion varsa geri ekle
+    const todaysCompletion = completions.find((c) => {
+      const completionDate = new Date(c.completed_at).toISOString().split("T")[0];
+      return completionDate === today;
+    });
+
+    if (todaysCompletion) {
+      await databases.createDocument(
         DATABASE_ID,
-        HABITS_COLLECTION_ID,
-        [Query.equal("user_id", user?.$id ?? "")]
+        COMPLETIONS_COLLECTION_ID,
+        ID.unique(),
+        {
+          ...cleanDocument(todaysCompletion),
+          user_id: user.$id,
+          habit_id: newHabitId,
+        }
       );
-      setHabits(response.documents as Habit[]);
-    } catch (error) {
-      console.error("Error fetching habits:", error);
     }
-  };
 
-  const handleDeleteHabit = async (id: string) => {
-    try {
-      await databases.deleteDocument(DATABASE_ID, HABITS_COLLECTION_ID, id)
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    // UI güncelle
+    fetchHabits();
+    fetchTodayCompletions();
+    setSnackbarVisible(false);
+    setDeletedHabitBackup(null);
+
+  } catch (error) {
+    console.error("❌ Error restoring habit:", error);
+  }
+};
 
     const handleCompleteHabit = async (id: string) => {
       if(!user || completedHabits?.includes(id)) return;
@@ -233,6 +331,17 @@ export default function Index() {
         ))
       )}
     </ScrollView>
+    <Snackbar
+      visible={snackbarVisible}
+      onDismiss={() => setSnackbarVisible(false)}
+      action={{
+        label: "Undo",
+        onPress: handleUndoDelete,
+      }}
+      duration={5000}
+    >
+      Habit deleted
+    </Snackbar>
     </View>
   );
 }

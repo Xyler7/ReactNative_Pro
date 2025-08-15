@@ -3,39 +3,14 @@
     "name": "Habit Tracker",
     "slug": "React_Native_Pro",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "reactnativepro",
-    "userInterfaceStyle": "automatic",
+    "runtimeVersion": "1.0.0",
     "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true,
-      "package": "com.xyler.React_Native_Pro"
-    },
+    "scheme": "xylerapp",
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
-    ],
     "experiments": {
       "typedRoutes": true
     },
@@ -45,11 +20,12 @@
         "projectId": "c9c9c221-338c-4709-8114-875cd6c5d95a"
       }
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
     "updates": {
       "url": "https://u.expo.dev/c9c9c221-338c-4709-8114-875cd6c5d95a"
+    },
+    "owner": "xyler",
+    "android": {
+      "package": "com.xyler.React_Native_Pro"
     }
   }
 }

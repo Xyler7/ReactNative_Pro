@@ -5,23 +5,35 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-function RouteGuard({children}: { children: React.ReactNode }) {
-  const router = useRouter();
-  const {user, isLoadingUser} = useAuth();
-  const segments =useSegments()
-
+function useAuthRedirect(user: any, isLoadingUser: boolean, segments: string[], router: any) {
   useEffect(() => {
-    const inAuthGroup = segments[0] === "auth";
+    if (isLoadingUser) return;
 
-    if (!user && !inAuthGroup && !isLoadingUser) {
+    const inAuthGroup = segments?.[0] === "auth";
+
+    if (!user && !inAuthGroup) {
       router.replace("/auth");
-    } else if (user && inAuthGroup && !isLoadingUser) {
+    } else if (user && inAuthGroup) {
       router.replace("/");
     }
-  }, [user, segments]);
+  }, [user, isLoadingUser, segments, router]);
+}
+
+function RouteGuard({ children }: { children: React.ReactNode }) {
+  const { user, isLoadingUser } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useAuthRedirect(user, isLoadingUser, segments, router);
+
+  if (isLoadingUser) {
+    return null; // Loading Spinner
+  }
 
   return <>{children}</>;
 }
+
+
 
 export default function Root() {
     return (
@@ -31,8 +43,8 @@ export default function Root() {
             <SafeAreaProvider>
               <RouteGuard>
                   <Stack> 
-                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                     <Stack.Screen name="auth" options={{ headerShown: false }} />
+                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                   </Stack>
               </RouteGuard>
             </SafeAreaProvider>
