@@ -2,9 +2,8 @@ import { client, COMPLETIONS_COLLECTION_ID, DATABASE_ID, databases, HABITS_COLLE
 import { useAuth } from "@/lib/auth-context";
 import { Habit, habitCompletions } from "@/types/database.type";
 import { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Query } from "react-native-appwrite";
-import { ScrollView } from "react-native-gesture-handler";
 import { Card, Text } from "react-native-paper";
 
 export default function StreakScreen() {

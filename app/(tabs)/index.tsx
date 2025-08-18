@@ -8,8 +8,9 @@ import { ID, Query } from "react-native-appwrite";
 import { Swipeable } from "react-native-gesture-handler";
 import { Button, Snackbar, Surface, Text } from "react-native-paper";
 
-export default function Index() {
 
+
+const Index: React.FC = () => {
   
   const {signOut, user} = useAuth();
 
@@ -265,6 +266,7 @@ export default function Index() {
     </View>
   );
   
+  
 
 
   return (
@@ -345,6 +347,7 @@ export default function Index() {
     </View>
   );
 }
+export default Index;
 
 const styles = StyleSheet.create({
   container: {

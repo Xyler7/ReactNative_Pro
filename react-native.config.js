@@ -11,9 +11,10 @@ module.exports = {
       platforms: {
         android: {
           sourceDir: './node_modules/react-native-gesture-handler/android',
-        },
       },
     },
+  },
+
     'react-native-screens': {
       platforms: {
         android: {
